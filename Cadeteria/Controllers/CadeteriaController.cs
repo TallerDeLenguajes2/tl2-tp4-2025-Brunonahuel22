@@ -18,6 +18,7 @@ class CadeteriaController : ControllerBase
     {
         return Ok(ListaPedidos);
     }
+
     [HttpGet("cadetes")]
     public IActionResult GetCadetes()
     {
@@ -27,15 +28,14 @@ class CadeteriaController : ControllerBase
     [HttpGet("informe")]
     public IActionResult GetInforme()
     {
-        var informe = new Informe
-        {
-            TotalPedidos = ListaPedidos.Count,
-            PedidosPendientes = ListaPedidos.Count(p => p.Estado == "Pendiente"),
-            PedidosRealizados = ListaPedidos.Count(p => p.Estado == "Realizado"),
-            PedidosCancelados = ListaPedidos.Count(p => p.Estado == "Cancelado"),
-            JornalTotal = ListaPedidos.Count(p => p.Estado == "Realizado") * 500,
-            TotalCadetes = ListaCadetes.Count
-        };
+        int totalpedidos = ListaPedidos.Count;
+        int pedidosPendientes = ListaPedidos.Count(p => p.Estado == "Pendiente");
+        int PedidosRealizados = ListaPedidos.Count(p => p.Estado == "Realizado");
+        int PedidosCancelados = ListaPedidos.Count(p => p.Estado == "Cancelado");
+        double JornalTotal = ListaPedidos.Count(p => p.Estado == "Realizado") * 500;
+        int TotalCadetes = ListaCadetes.Count;
+
+        Informe informe = new Informe(totalpedidos,pedidosPendientes,PedidosRealizados,PedidosCancelados,TotalCadetes,JornalTotal);
 
         return Ok(informe);
     }
@@ -54,21 +54,21 @@ class CadeteriaController : ControllerBase
     [HttpPut("cambiarestado/{idPedido}/{nuevoEstado}")]
     public IActionResult CambiarEstadoPedido(int numeroPedido, string nuevoEstado)
     {
-     
-    foreach (var pedido in ListaPedidos)
-    {
-        if (pedido.Numero == numeroPedido)
+
+        foreach (var pedido in ListaPedidos)
         {
-            
-            pedido.CambiarEstado(nuevoEstado);
-            
-            
-            return Ok();
+            if (pedido.Numero == numeroPedido)
+            {
+
+                pedido.CambiarEstado(nuevoEstado);
+
+
+                return Ok();
+            }
         }
-    }
-    
-   
-    return NotFound();
+
+
+        return NotFound();
     }
 
 

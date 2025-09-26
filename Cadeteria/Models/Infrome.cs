@@ -11,4 +11,13 @@ public class Informe
 
     // Constructor simple
     public Informe() { }
+    public Informe(int pedidos, int pedidospendientes, int pedidosrealizados, int pedidoscancelados, int totalCadetes, double jornal)
+    {
+        TotalPedidos = pedidos;
+        PedidosPendientes = pedidospendientes;
+        PedidosRealizados = pedidosrealizados;
+        PedidosCancelados = pedidoscancelados;
+        TotalCadetes = totalCadetes;
+        JornalTotal = jornal;
+     }
 }
